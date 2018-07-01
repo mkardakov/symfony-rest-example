@@ -1,0 +1,24 @@
+goal_index:
+    path:     /
+    defaults: { _controller: "AppBundle:Goal:index" }
+    methods:  GET
+
+goal_show:
+    path:     /{id}
+    defaults: { _controller: "AppBundle:Goal:show" }
+    methods:  GET
+
+goal_new:
+    path:     /
+    defaults: { _controller: "AppBundle:Goal:new" }
+    methods:  [POST]
+
+goal_edit:
+    path:     /{id}
+    defaults: { _controller: "AppBundle:Goal:edit" }
+    methods:  [PUT, PATCH]
+
+goal_delete:
+    path:     /{id}
+    defaults: { _controller: "AppBundle:Goal:delete" }
+    methods:  DELETE

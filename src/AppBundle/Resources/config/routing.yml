@@ -1,0 +1,4 @@
+app_goal:
+    resource: "@AppBundle/Resources/config/routing/goal.yml"
+    prefix:   /goal
+

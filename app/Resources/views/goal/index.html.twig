@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Goals list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for goal in goals %}
+            <tr>
+                <td><a href="{{ path('goal_show', { 'id': goal.id }) }}">{{ goal.title }}</a></td>
+                <td>{{ goal.description }}</td>
+                <td>{{ goal.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('goal_show', { 'id': goal.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('goal_edit', { 'id': goal.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('goal_new') }}">Create a new goal</a>
+        </li>
+    </ul>
+{% endblock %}
