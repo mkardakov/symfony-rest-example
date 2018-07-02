@@ -1,4 +1,6 @@
 app_goal:
     resource: "@AppBundle/Resources/config/routing/goal.yml"
     prefix:   /goal
-
+app_tag:
+    resource: "@AppBundle/Resources/config/routing/tag.yml"
+    prefix:   /tag

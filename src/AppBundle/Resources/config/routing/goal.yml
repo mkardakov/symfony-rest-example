@@ -18,6 +18,16 @@ goal_edit:
     defaults: { _controller: "AppBundle:Goal:edit" }
     methods:  [PUT, PATCH]
 
+goal_add_tag:
+    path:     /{id}/tag/{tag_id}
+    defaults: { _controller: "AppBundle:Goal:addTag" }
+    methods:  [POST]
+
+goal_remove_tag:
+    path:     /{id}/tag/{tag_id}
+    defaults: { _controller: "AppBundle:Goal:removeTag" }
+    methods:  [DELETE]
+
 goal_delete:
     path:     /{id}
     defaults: { _controller: "AppBundle:Goal:delete" }

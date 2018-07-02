@@ -2,11 +2,15 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Traits\Merge;
+
 /**
- * Goal
+ * Class Goal
+ * @package AppBundle\Entity
  */
 class Goal
 {
+    use Merge;
     /**
      * @var int
      */
@@ -31,6 +35,19 @@ class Goal
      * @var \DateTime
      */
     private $updatedAt;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $tags;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -89,18 +106,6 @@ class Goal
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * @param array $params
-     */
-    public function merge(array $params)
-    {
-        foreach ($params as $name => $value) {
-            if (property_exists($this, $name)) {
-                $this->$name = $value;
-            }
-        }
     }
 
     /**
@@ -166,5 +171,39 @@ class Goal
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Add tag
+     *
+     * @param \AppBundle\Entity\Tag $tag
+     *
+     * @return Goal
+     */
+    public function addTag(\AppBundle\Entity\Tag $tag)
+    {
+        $this->tags[] = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Remove tag
+     *
+     * @param \AppBundle\Entity\Tag $tag
+     */
+    public function removeTag(\AppBundle\Entity\Tag $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }
