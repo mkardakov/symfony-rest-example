@@ -22,7 +22,7 @@ class Tag
     private $title;
 
     /**
-     * @var int
+     * @var string
      */
     private $color;
 

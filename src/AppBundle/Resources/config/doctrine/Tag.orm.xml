@@ -5,6 +5,11 @@
       <generator strategy="AUTO"/>
     </id>
     <field name="title" type="string" column="title" length="255" unique="true"/>
-    <field name="color" type="integer" column="color" nullable="true"/>
+    <field name="color" type="string" length="6" column="color" nullable="true">
+      <options>
+        <option name="fixed">true</option>
+        <option name="default">333333</option>
+      </options>
+    </field>
   </entity>
 </doctrine-mapping>

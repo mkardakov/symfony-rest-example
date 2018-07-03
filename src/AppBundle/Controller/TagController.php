@@ -7,6 +7,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Tag controller.
@@ -20,12 +21,18 @@ class TagController extends FOSRestController
     private $serializer;
 
     /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    /**
      * GoalController constructor.
      * @param SerializerInterface $serializer
      */
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator)
     {
         $this->serializer = $serializer;
+        $this->validator = $validator;
     }
 
     /**
@@ -47,15 +54,22 @@ class TagController extends FOSRestController
      */
     public function newAction(Request $request)
     {
-        $goal = $this->serializer->deserialize(
+        $tagDTO = $this->serializer->deserialize(
             $request->getContent(),
-            \AppBundle\Entity\Tag::class,
+            \AppBundle\DTO\Tag::class,
             'json'
         );
-        $this->getDoctrine()->getManager()->persist($goal);
+        $errors = $this->validator->validate($tagDTO);
+        if (count($errors) > 0) {
+            $view = $this->view((string)$errors);
+            return $this->handleView($this->view($view, 400));
+        }
+        $tag = new Tag();
+        $tag->merge($tagDTO);
+        $this->getDoctrine()->getManager()->persist($tag);
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->handleView($this->view(null, 201));
+        return $this->handleView($this->view($tag, 201));
 
     }
 
@@ -74,28 +88,33 @@ class TagController extends FOSRestController
      * @param Tag $goal
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, Tag $goal)
+    public function editAction(Request $request, Tag $tag)
     {
-        $data = $this->serializer->deserialize(
+        $tagDTO = $this->serializer->deserialize(
             $request->getContent(),
-            'array',
+            \AppBundle\DTO\Tag::class,
             'json'
         );
-        $goal->merge($data);
-        $this->getDoctrine()->getManager()->persist($goal);
+        $errors = $this->validator->validate($tagDTO);
+        if (count($errors) > 0) {
+            $view = $this->view((string)$errors);
+            return $this->handleView($this->view($view, 400));
+        }
+        $tag->merge($tagDTO);
+        $this->getDoctrine()->getManager()->persist($tag);
         $this->getDoctrine()->getManager()->flush();
-        return $this->handleView($this->view($goal, 200));
+        return $this->handleView($this->view($tag, 200));
     }
 
     /**
      * @param Request $request
-     * @param Tag $goal
+     * @param Tag $tag
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function deleteAction(Request $request, Tag $goal)
+    public function deleteAction(Request $request, Tag $tag)
     {
         $em = $this->getDoctrine()->getManager();
-        $em->remove($goal);
+        $em->remove($tag);
         $em->flush();
         return $this->handleView($this->view(null, 200));
     }
