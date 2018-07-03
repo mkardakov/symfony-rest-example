@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Comment;
 use AppBundle\Entity\Goal;
 use AppBundle\Entity\Tag;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -73,7 +74,7 @@ class GoalController extends FOSRestController
         $this->getDoctrine()->getManager()->persist($goal);
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->handleView($this->view(null, 201));
+        return $this->handleView($this->view($goal, 201));
 
     }
 
@@ -137,7 +138,7 @@ class GoalController extends FOSRestController
         $goal->addTag($tag);
         $this->getDoctrine()->getManager()->persist($goal);
         $this->getDoctrine()->getManager()->flush();
-        return $this->handleView($this->view(null, 201));
+        return $this->handleView($this->view($tag, 201));
     }
 
     /**
@@ -152,6 +153,49 @@ class GoalController extends FOSRestController
             throw new NotFoundResourceException("Tag $tag_id does not exist");
         }
         $goal->removeTag($tag);
+        $this->getDoctrine()->getManager()->persist($goal);
+        $this->getDoctrine()->getManager()->flush();
+        return $this->handleView($this->view(null, 200));
+    }
+
+    /**
+     * @param Request $request
+     * @param Goal $goal
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addCommentAction(Request $request, Goal $goal)
+    {
+        $commentDTO = $this->serializer->deserialize(
+            $request->getContent(),
+            \AppBundle\DTO\Comment::class,
+            'json'
+        );
+        $errors = $this->validator->validate($commentDTO);
+        if (count($errors) > 0) {
+            $view = $this->view((string)$errors);
+            return $this->handleView($this->view($view, 400));
+        }
+        $comment = new Comment();
+        $comment->merge($commentDTO);
+        $goal->addComment($comment);
+        $this->getDoctrine()->getManager()->persist($comment);
+        $this->getDoctrine()->getManager()->persist($goal);
+        $this->getDoctrine()->getManager()->flush();
+        return $this->handleView($this->view($comment, 201));
+    }
+
+    /**
+     * @param Goal $goal
+     * @param int $comment_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function removeCommentAction(Goal $goal, $comment_id)
+    {
+        $comment = $this->getDoctrine()->getRepository(Tag::class)->find($comment_id);
+        if (!$comment) {
+            throw new NotFoundResourceException("Tag $comment_id does not exist");
+        }
+        $goal->removeTag($comment);
         $this->getDoctrine()->getManager()->persist($goal);
         $this->getDoctrine()->getManager()->flush();
         return $this->handleView($this->view(null, 200));

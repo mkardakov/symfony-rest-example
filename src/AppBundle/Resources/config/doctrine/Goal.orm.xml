@@ -18,6 +18,7 @@
         </inverse-join-columns>
       </join-table>
     </many-to-many>
+    <one-to-many field="comments" target-entity="Comment" mapped-by="goal" />
     <lifecycle-callbacks>
       <lifecycle-callback type="prePersist" method="setCreationTime" />
       <lifecycle-callback type="preUpdate" method="setModificationTime" />
