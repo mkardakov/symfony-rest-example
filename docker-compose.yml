@@ -1,0 +1,27 @@
+version: '3'
+services:
+  php:
+    build: ./environment/php
+    volumes:
+      - .:/var/www/html
+    links:
+      - database
+  webserver:
+    image: "nginx:latest"
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - ./environment/nginx/app.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - php
+  database:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: goals
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+      - ./environment/mysql/my.conf:/etc/mysql/my.conf
