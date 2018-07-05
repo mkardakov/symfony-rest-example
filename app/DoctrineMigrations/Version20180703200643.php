@@ -22,7 +22,7 @@ class Version20180703200643 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-        $this->addSql('INSERT INTO tag (id, title, color) VALUES(1, "General", "FF00CC"), (2, "Travelling", "0000bb"');
+        $this->addSql('INSERT INTO tag (id, title, color) VALUES(1, "General", "FF00CC"), (2, "Travelling", "0000bb")');
         $this->addSql('INSERT INTO goal (title, description, created_at) 
         VALUES("Be stronger", "Add some muscles", NOW()), 
         ("Be smarter", "Dead some books and watch TED", NOW()), ("Find a hobby", "Should I come back at music life?", NOW())'

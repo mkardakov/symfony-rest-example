@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="FooBar" default="install">
+
+    <!-- ============================================  -->
+    <!-- Target: prepare                               -->
+    <!-- ============================================  -->
+    <target name="install">
+        <echo msg="Do some composer install" />
+        <composer php="/usr/bin/php" composer="/usr/local/bin/composer" command="install" >
+            <arg value="-o" />
+        </composer>
+        <echo msg="Do necessary console commands" />
+        <exec command="bin/console cache:clear" passthru="true"/>
+        <exec command="bin/console doctrine:schema:drop --force" passthru="true"/>
+        <exec command="bin/console doctrine:query:sql 'DROP TABLE IF EXISTS goals.migration_versions'" passthru="true"/>
+        <exec command="bin/console doctrine:schema:create" passthru="true"/>
+        <exec command="bin/console doctrine:migrations:execute 20180703200643" passthru="true"/>
+
+    </target>
+
+</project>
