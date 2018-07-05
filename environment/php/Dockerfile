@@ -5,4 +5,6 @@ RUN docker-php-ext-install pdo_mysql && \
     php installer.php && \
     rm installer.php && \
     chmod +x composer.phar && \
-    mv composer.phar /usr/bin/composer
+    mv composer.phar /usr/bin/composer && \
+    pecl install xdebug-2.6.0 && \
+    docker-php-ext-enable xdebug

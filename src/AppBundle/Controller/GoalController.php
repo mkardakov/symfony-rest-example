@@ -6,12 +6,11 @@ use AppBundle\Entity\Comment;
 use AppBundle\Entity\Goal;
 use AppBundle\Entity\Tag;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Serializer\JMSSerializerAdapter;
 use JMS\Serializer\SerializerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 /**
  * Class GoalController
@@ -127,18 +126,15 @@ class GoalController extends FOSRestController
     /**
      * @param Goal $goal
      * @param int $tag_id
+     * @Entity("tag", expr="repository.find(tag_id)")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addTagAction(Goal $goal, $tag_id)
+    public function addTagAction(Goal $goal, Tag $tag)
     {
-        $tag = $this->getDoctrine()->getRepository(Tag::class)->find($tag_id);
-        if (!$tag) {
-            throw new NotFoundResourceException("Tag $tag_id does not exist");
-        }
         $goal->addTag($tag);
         $this->getDoctrine()->getManager()->persist($goal);
         $this->getDoctrine()->getManager()->flush();
-        return $this->handleView($this->view($tag, 201));
+        return $this->handleView($this->view(null, 200));
     }
 
     /**

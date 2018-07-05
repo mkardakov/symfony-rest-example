@@ -6,6 +6,8 @@ services:
       - .:/var/www/html
     links:
       - database
+    environment:
+      XDEBUG_CONFIG: "remote_host=172.17.0.1 idekey=PHPSTORM remote_connect_back=1 remote_enable=1"
   webserver:
     image: "nginx:latest"
     ports:

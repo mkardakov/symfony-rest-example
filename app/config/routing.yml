@@ -1,9 +1,9 @@
 app_goal:
     type: rest
     resource: "@AppBundle/Resources/config/routing/goal.yml"
-    prefix:   /goal
+    prefix:   /api/goal
 
 app_tag:
     type: rest
     resource: "@AppBundle/Resources/config/routing/tag.yml"
-    prefix:   /tag
+    prefix:   /api/tag
