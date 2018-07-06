@@ -6,6 +6,11 @@
     <!-- Target: prepare                               -->
     <!-- ============================================  -->
     <target name="install">
+        <echo msg="Permissions setup" />
+        <chmod file="var/cache" mode="0777" />
+        <chmod file="var/logs" mode="0777" />
+        <chmod file="var/sessions" mode="0777" />
+
         <echo msg="Do some composer install" />
         <composer php="/usr/bin/php" composer="/usr/local/bin/composer" command="install" >
             <arg value="-o" />
@@ -16,6 +21,7 @@
         <exec command="bin/console doctrine:query:sql 'DROP TABLE IF EXISTS goals.migration_versions'" passthru="true"/>
         <exec command="bin/console doctrine:schema:create" passthru="true"/>
         <exec command="bin/console doctrine:migrations:execute 20180703200643" passthru="true"/>
+
 
     </target>
 
